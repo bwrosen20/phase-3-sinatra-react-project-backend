@@ -53,7 +53,6 @@ class ApplicationController < Sinatra::Base
       pages_read: params[:pages_read],
       body: params[:body],
       book_id: params[:book_id],
-      read: params[:read]
     )
     note.to_json
   end
