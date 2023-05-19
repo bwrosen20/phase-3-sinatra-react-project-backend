@@ -2,8 +2,8 @@ class ApplicationController < Sinatra::Base
   set :default_content_type, 'application/json'
   
   get '/books' do
-    books=Book.all.order(:created_at)
-    books.to_json(include: :notes)
+      books=Book.all.order(:title)
+      books.to_json(include: :notes)
   end
 
   post '/books' do
@@ -13,6 +13,7 @@ class ApplicationController < Sinatra::Base
       genre: params[:genre],
       blurb: params[:blurb],
       image_url: params[:image_url],
+      notes: [],
       read: false
     )
     book.to_json
@@ -32,6 +33,7 @@ class ApplicationController < Sinatra::Base
       genre: params[:genre],
       blurb: params[:blurb],
       image_url: params[:image_url],
+      notes: params[:notes],
       read:params[:read]
     )
     book.to_json
@@ -47,12 +49,13 @@ class ApplicationController < Sinatra::Base
     note.to_json
   end
 
-  post '/notes' do
-    note=Note.create(
+  post '/books/:id' do
+    book=Book.find(params[:id])
+    
+    note=book.notes.create(
       rating: params[:rating],
       pages_read: params[:pages_read],
-      body: params[:body],
-      book_id: params[:book_id],
+      body: params[:body]
     )
     note.to_json
   end
